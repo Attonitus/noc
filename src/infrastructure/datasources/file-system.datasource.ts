@@ -30,8 +30,10 @@ export class FileSystemDatasource implements LogDatasource{
     }
 
 
+
+
     async saveLog(log: LogEntity): Promise<void> {
-        const logAsJson  = `${JSON.stringify(log)}` 
+        const logAsJson  = `${JSON.stringify(log)}\n` 
 
         switch(log.level){
             case EntityLevelNum.low:
@@ -45,11 +47,27 @@ export class FileSystemDatasource implements LogDatasource{
                 break;
 
         }
-
-        throw new Error("Method not implemented.");
     }
-    getLogs(severityLevel: EntityLevelNum): Promise<LogEntity[]> {
-        throw new Error("Method not implemented.");
+
+
+    private getFilesPath = (path: string) : LogEntity[] => {
+        const content = fs.readFileSync(path, 'utf8');
+        const logs = content.split('\n').map( log => LogEntity.fromJson(log));
+        return logs;
+    }
+
+    async getLogs(severityLevel: EntityLevelNum): Promise<LogEntity[]> {
+        
+        switch(severityLevel){
+            case EntityLevelNum.low:
+                return this.getFilesPath(this.lowLogPath);
+            case EntityLevelNum.medium:
+                return this.getFilesPath(this.mediumLogPath);
+            case EntityLevelNum.high:
+                return this.getFilesPath(this.highLogPath);
+            default:
+                throw new Error(`${severityLevel} not implemented!`);
+        }
     }
 
 }

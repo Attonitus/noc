@@ -1,7 +1,9 @@
+import { LogRepositoryImpl } from "../domain/repository/log.repository.impl";
 import { CheckService } from "../domain/use-cases/check-service";
+import { FileSystemDatasource } from "../infrastructure/datasources/file-system.datasource";
 import { CronService } from "./cron/cron-service";
 
-
+const FileSystemRepository = new LogRepositoryImpl( new FileSystemDatasource );
 
 export class Server{
 
@@ -13,12 +15,13 @@ export class Server{
             () => {
                 const url = "https://google.com";
                 new CheckService(
-                () => {
-                    console.log('Success!!');
-                },
-                error => {
-                    console.log(`${url} failed! Error: ${error}`)
-                }
+                    FileSystemRepository,
+                    () => {
+                        console.log('Success!!');
+                    },
+                    error => {
+                        console.log(`${url} failed! Error: ${error}`)
+                    }
                 ).execute(url);
             }
         );
