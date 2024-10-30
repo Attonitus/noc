@@ -1,4 +1,5 @@
 import { Server } from "./presentation/server";
+import 'dotenv/config'
 
 
 (async() => {
@@ -9,6 +10,6 @@ import { Server } from "./presentation/server";
 
 
 function main(){
-
+    // console.log(process.env.MAIL_SERVER);
     Server.start();
 }

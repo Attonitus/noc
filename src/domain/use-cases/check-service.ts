@@ -5,8 +5,8 @@ interface CheckServiceInterface{
     execute: (url: string) => Promise<boolean>;
 }
 
-type successCallbackType = () => void;
-type errorCallbackType = (error: string) => void; 
+type successCallbackType = (() => void) | undefined;
+type errorCallbackType = ((error: string) => void) | undefined; 
 
 
 export class CheckService implements CheckServiceInterface{
@@ -22,17 +22,29 @@ export class CheckService implements CheckServiceInterface{
             const res = await fetch(url);
             !res.ok ? new Error('Error on check service') : console.log(`${url} is ok!`);
 
-            const log = new LogEntity(EntityLevelNum.low, `Service ${url} is working`)
+            const log = new LogEntity({
+                level: EntityLevelNum.low,
+                messagge: `Service ${url} is working`,
+                createdAt: new Date(),
+                origin : "log.entity.ts",
+            });
+
             this.logRepository.saveLog(log)
 
-            this.succesCallback();
+            this.succesCallback && this.succesCallback();
             return true;
+
         } catch (error) {
             const errorMessage = `${error}`;
-            const log = new LogEntity(EntityLevelNum.high, errorMessage);
+            const log = new LogEntity({
+                level: EntityLevelNum.high,
+                messagge: `Error: ${errorMessage}. Service ${url} is NOT working.`,
+                createdAt: new Date(),
+                origin : "log.entity.ts",
+            });
             this.logRepository.saveLog(log)
-            
-            this.errorCallback(`${error}`);
+
+            this.errorCallback && this.errorCallback(`${error}`);
             return false;
         }
     }

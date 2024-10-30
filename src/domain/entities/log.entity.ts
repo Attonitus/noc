@@ -5,23 +5,39 @@ export enum EntityLevelNum{
     high = 'high'
 }
 
+interface EntityOptions {
+    level: EntityLevelNum, 
+    messagge: string,
+    createdAt: Date,
+    origin : string;
+}
+
 
 export class LogEntity{
     public level : EntityLevelNum;
     public messagge : string;
-    public createdAt : Date; 
+    public createdAt : Date;
+    public origin : string;
 
-    constructor(level: EntityLevelNum, messagge: string){
+    constructor(options : EntityOptions){
+
+        const {level, messagge, createdAt = new Date(), origin} = options;
+
         this.level = level;
         this.messagge = messagge;
-        this.createdAt = new Date();
+        this.createdAt = createdAt,
+        this.origin = origin
     }
 
     static fromJson = ( json: string ): LogEntity => {
-        const {messagge, level, createdAt} = JSON.parse(json);
+        const {messagge, level, createdAt, origin} = JSON.parse(json);
 
-        const log = new LogEntity(level, messagge);
-        log.createdAt = new Date(createdAt);
+        const log = new LogEntity({
+            messagge,
+            level,
+            createdAt,
+            origin
+        });
 
         return log;
     }
