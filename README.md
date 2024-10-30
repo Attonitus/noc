@@ -1,7 +1,9 @@
 # NOC (Network Operations Center)
 
-### Check if a URL is up on down (online)
+### Check service URL up/down and sends log with that information on a mail
 
-Run this app
+1. Install al dependecies: `npm i`
 
-- Install dependecies: npm i
+2. Create a .env and set variables using .env.template reference
+
+3. Run program: `npm run dev`

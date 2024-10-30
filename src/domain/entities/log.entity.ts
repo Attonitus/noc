@@ -16,7 +16,7 @@ interface EntityOptions {
 export class LogEntity{
     public level : EntityLevelNum;
     public messagge : string;
-    public createdAt : Date;
+    public createdAt? : Date;
     public origin : string;
 
     constructor(options : EntityOptions){
