@@ -6,4 +6,6 @@
 
 2. Create a .env and set variables using .env.template reference
 
-3. Run program: `npm run dev`
+3. `docker compose up -d` to initialize docker and watching
+
+4. Run program: `npm run dev`
